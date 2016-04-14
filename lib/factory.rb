@@ -2,7 +2,8 @@ class Factory
   def self.new(*attributes, &block)
     raise ArgumentError, 'wrong number of arguments (given 0, expected 1+)' if attributes.empty?
 
-    if attributes.first.is_a?(String) && attributes.first.match(/^[A-Z]/)
+    if attributes.first.is_a?(String)
+      raise NameError, "identifier #{attributes.first} needs to be constant" unless attributes.first.match(/^[A-Z]/)
       const = attributes.shift
     else
       const = nil

@@ -26,6 +26,10 @@ RSpec.describe Factory do
 			expect(factory2.const_defined?('Customer2')).to be false
 		end
 
+		it 'raises NameError with invalid constant name as first argument' do
+			expect { Factory.new('customer', :name, :address) }.to raise_error(NameError)
+		end
+
 		it 'allows class to be modified via the block' do
 			expect(factory.new.greeting).to eq("Hello ruby!")
 		end
@@ -90,6 +94,12 @@ RSpec.describe Factory do
 
 		it 'raise TypeError when variable not a string, symbol, or integer' do
 			expect { customer[Object.new] = 'object' }.to raise_error(TypeError)
+		end
+	end
+
+	context '#members' do
+		it 'returns an array of attribute names' do
+			expect(customer.members).to eq([:name, :address, :zip])
 		end
 	end
 
