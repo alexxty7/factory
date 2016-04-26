@@ -13,8 +13,8 @@ class Factory
       attr_accessor(*attributes)
 
       def initialize(*values)
-        raise ArgumentError, 'factory size differs' if values.size > members.size
-        values.each_with_index { |val, i| instance_variable_set("@#{members[i]}", val) }
+        raise ArgumentError, 'factory size differs' if values.size > size
+        values.each_with_index { |val, i| send("#{members[i]}=", val) }
       end
 
       define_method :members do
@@ -25,9 +25,9 @@ class Factory
         check_attribute(var)
 
         if var.is_a?(Fixnum)
-          instance_variable_get("@#{members[var]}")
+          send(members[var])
         else
-          instance_variable_get("@#{var}")
+          send(var)
         end
       end
 
@@ -35,9 +35,9 @@ class Factory
         check_attribute(var)
 
         if var.is_a? Fixnum
-          instance_variable_set("@#{members[var]}", value)
+          send("#{members[var]}=", value)
         else
-          instance_variable_set("@#{var}", value)
+          send("#{var}=", value)
         end
       end
 
